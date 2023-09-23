@@ -1,10 +1,10 @@
 import { useState, useRef  } from 'react';
-// import {useNavigate} from 'react-router-dom';
+ import {NavLink} from 'react-router-dom';
 // import AuthContext from '../../store/AuthContext';
 import classes from './AuthForm.module.css';
-
+import { useNavigate } from 'react-router-dom';
 const AuthForm = () => {
-//   const history = useNavigate();
+  const history = useNavigate();
   const emailInputref = useRef();
   const passwordInputref = useRef(); 
   const confirmPasswordref = useRef();
@@ -69,11 +69,12 @@ const AuthForm = () => {
       console.log(data);
     //   authctx.login(data.idToken,data.email);
       localStorage.setItem('token',data.idTtoken);
+      history('/home');
     //   localStorage.setItem('email',data.email);
-    //   history('/');
     } else {
      console.log("User Successfully Signed up");
      alert("User Successfully Signed up");
+      history('/');
     }
   })
   .catch(err=>{
@@ -110,6 +111,7 @@ const AuthForm = () => {
 }
         <div className={classes.actions}>
           {!isLoading && <button>{isLogin ? 'Login' : 'Create Account'}</button>}
+          {!isLoading && <NavLink to='/home'>{isLogin ? 'Change passowrd' : ''}</NavLink>}
           {isLoading && <p>Sending Request.....</p>}
           <button
             type='button'
