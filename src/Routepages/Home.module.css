@@ -1,0 +1,18 @@
+.home {
+    display: flex;
+    justify-content: space-between;
+    background-color: black;
+    padding: 10px; /* Add padding for spacing */
+  }
+  
+  .home span {
+    color: white; /* Set text color to white */
+  }
+  
+  .home a {
+    color: #007bff; /* Set link color to blue (adjust as needed) */
+    text-decoration: none; /* Remove underline from the link */
+   
+  }
+
+  

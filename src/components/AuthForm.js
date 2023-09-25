@@ -68,7 +68,7 @@ const AuthForm = () => {
     if (isLogin) {
       console.log(data);
     //   authctx.login(data.idToken,data.email);
-      localStorage.setItem('token',data.idTtoken);
+      localStorage.setItem('token',data.idToken);
       history('/home');
     //   localStorage.setItem('email',data.email);
     } else {
@@ -111,7 +111,7 @@ const AuthForm = () => {
 }
         <div className={classes.actions}>
           {!isLoading && <button>{isLogin ? 'Login' : 'Create Account'}</button>}
-          {!isLoading && <NavLink to='/home'>{isLogin ? 'Change passowrd' : ''}</NavLink>}
+          {!isLoading && <NavLink to='/home'>{isLogin ? 'Change password' : ''}</NavLink>}
           {isLoading && <p>Sending Request.....</p>}
           <button
             type='button'
