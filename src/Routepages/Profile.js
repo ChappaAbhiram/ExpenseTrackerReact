@@ -1,8 +1,32 @@
-import { useRef } from "react";
+import { useRef , useEffect} from "react";
 import React from "react";
 import classes from './Profile.module.css';
 import { useNavigate } from "react-router-dom";
 const Profile = ()=> {
+    useEffect( 
+            ()=>{fetch("https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyBa1t8g-1UL2YeO6OIh4jJAydUnoaNH_fs",{
+                method : "POST",
+                headers : {
+                    "Content-Type" : "application/json"
+                },
+                body : JSON.stringify({
+                    idToken : localStorage.getItem("token")
+                })}).then(resp=>{
+                    if(resp.ok){
+                        return resp.json();
+                    }
+                    else{
+                        return resp.json().then(data=>{
+                            alert(data.error.message);
+                        })
+                    }
+                }).then(data=>{
+                    console.log(data);
+                    Fullnameinputref.current.value = data.users[0].displayName;
+                    ProfileURLinputref.current.value = data.users[0].photoUrl;
+                }
+            )}
+        ,[])
     const Fullnameinputref = useRef();
     const ProfileURLinputref = useRef();
     const history = useNavigate();
@@ -37,9 +61,6 @@ const Profile = ()=> {
         }).then(data=>{
             alert("Successfully updated User details");
             console.log(data);
-            Fullnameinputref.current.value = '';
-            ProfileURLinputref.current.value='';
-            history("/home");
 
         }).catch(err=>{
                 alert(err.message);
