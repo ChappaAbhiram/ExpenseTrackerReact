@@ -20,7 +20,7 @@
   }
   
   .control label {
-    display: inline-block;
+    /* display: inline-block; */
     color: white;
     font-weight: bold;
     margin-bottom: 0.5rem;
@@ -72,3 +72,4 @@
     background-color: transparent;
     color: #ae82cc;
   }
+  

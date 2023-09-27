@@ -12,9 +12,11 @@ const AuthForm = () => {
 //   const authctx = useContext(AuthContext);
   const [isLogin, setIsLogin] = useState(false);
   const [isLoading,setIsLoading] = useState(false);
+  const [forgotPassword,setforgotPassword] = useState(false);
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
+    setforgotPassword(false);
   };
   const submitHandler = (event)=>{
   event.preventDefault();
@@ -81,16 +83,50 @@ const AuthForm = () => {
     alert(err.message);
   });
   }
-
+ const forgotpasswordHandler = (e)=>{
+  e.preventDefault();
+  setforgotPassword(true);
+  setIsLogin((prevState) => !prevState);
+ }
+ const sendLinkHandler = (e)=>{
+  const enteredEmail = emailInputref.current.value;
+  e.preventDefault();
+  setIsLoading(true);
+  fetch("https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyBa1t8g-1UL2YeO6OIh4jJAydUnoaNH_fs",{
+    method : "POST",
+    headers : {
+      "Content-Type" : "application/json"
+    },
+    body : JSON.stringify({
+      email : enteredEmail,
+      requestType : "PASSWORD_RESET"
+    })
+  }).then(res=>{
+    if(res.ok){
+      return res.json();
+    }
+    else{
+      return res.json().then(data=>{
+        if(data && data.error && data.error.message){
+          alert(`${data.error.message}`)
+        }
+      })
+    }
+  }).then(data=>{
+    console.log(data);
+    setIsLoading(false);
+  })
+ }
   return (
     <section className={classes.auth}>
-      <h1>{isLogin ? 'Login' : 'Sign Up'}</h1>
+      <h1>{isLogin ? 'Login' : !forgotPassword ? 'Sign Up' : ''}</h1>
       <form onSubmit={submitHandler}>
         <div className={classes.control}>
-          <label htmlFor='email'>Your Email</label>
+          {!forgotPassword && <label htmlFor='email'>Your Email</label>}
+          {forgotPassword && <label htmlFor='email'>Enter Your Registered email</label>}
           <input type='email' id='email' required ref={emailInputref}/>
         </div>
-        <div className={classes.control}>
+        {!forgotPassword && (<div className={classes.control}>
           <label htmlFor='password'>Your Password</label>
           <input
             type='password'
@@ -98,8 +134,8 @@ const AuthForm = () => {
             required
             ref={passwordInputref}
           />
-        </div>
-        {!isLogin && (<div className={classes.control}>
+        </div>)}
+        {!isLogin && !forgotPassword && (<div className={classes.control}>
           <label htmlFor='confirmpassword'>Confirm Password</label>
           <input
             type='password'
@@ -110,15 +146,16 @@ const AuthForm = () => {
         </div>)
 }
         <div className={classes.actions}>
-          {!isLoading && <button>{isLogin ? 'Login' : 'Create Account'}</button>}
-          {!isLoading && <NavLink to='/home'>{isLogin ? 'Change password' : ''}</NavLink>}
+          {!isLoading && !forgotPassword && <button>{isLogin ? 'Login' : 'Create Account'}</button>}
+          {!isLoading && !forgotPassword && isLogin && <button className={classes.toggle} onClick={forgotpasswordHandler}>'Forgot password'</button>}
+          {!isLoading && forgotPassword && <button onClick = {sendLinkHandler}>Send Link</button>}
           {isLoading && <p>Sending Request.....</p>}
           <button
             type='button'
             className={classes.toggle}
             onClick={switchAuthModeHandler}
           >
-            {isLogin ? 'Create new account' : 'Login with existing account'}
+            {isLogin && !forgotPassword ? 'Create new account' : 'Login with existing account'}
           </button>
         </div>
       </form>
