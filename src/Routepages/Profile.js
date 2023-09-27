@@ -68,6 +68,7 @@ const Profile = ()=> {
         }).then(data=>{
             alert("Successfully updated User details");
             console.log(data);
+            history("/home",{replace : true})
 
         }).catch(err=>{
                 alert(err.message);

@@ -69,12 +69,12 @@ const AuthForm = () => {
       console.log(data);
     //   authctx.login(data.idToken,data.email);
       localStorage.setItem('token',data.idToken);
-      history('/home');
+      history('/home',{replace : true});
     //   localStorage.setItem('email',data.email);
     } else {
      console.log("User Successfully Signed up");
      alert("User Successfully Signed up");
-      history('/');
+      history('/',{replace : true});
     }
   })
   .catch(err=>{
