@@ -17,13 +17,20 @@ const Profile = ()=> {
                     }
                     else{
                         return resp.json().then(data=>{
-                            alert(data.error.message);
+                    let errorMessage = 'Authentication failed!';
+                    console.log(data);
+                    if(data && data.error && data.error.message){
+                    errorMessage = data.error.message;
+                    }
+                            alert(errorMessage);
                         })
                     }
                 }).then(data=>{
                     console.log(data);
+                    if(data.users[0].displayName && data.users[0].photoUrl){
                     Fullnameinputref.current.value = data.users[0].displayName;
                     ProfileURLinputref.current.value = data.users[0].photoUrl;
+                    }
                 }
             )}
         ,[])
@@ -85,7 +92,7 @@ const Profile = ()=> {
         / >
         <button type="submit">Update</button>
     </form>  
-    </React.Fragment>  
+    </React.Fragment>
     )
 
 }

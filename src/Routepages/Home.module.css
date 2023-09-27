@@ -14,5 +14,23 @@
     text-decoration: none; /* Remove underline from the link */
    
   }
+  .but{
+    display : flex;
+    justify-content: center;
+    align-items: center;
+    margin-top : 20px;
+  }
+  .innerbut{
+    background-color: black;
+    padding: 4px;
+    border-radius: 3px;
+    font-family: bold;
+    font-size: 20px;
+    cursor: pointer;
+    color : white;
+  }
+  .innerbut:hover{
+    background-color: rgba(29, 21, 21, 0.599);
+  }
 
   
