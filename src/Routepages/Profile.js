@@ -3,7 +3,9 @@ import React from "react";
 import classes from './Profile.module.css';
 import { useNavigate } from "react-router-dom";
 const Profile = ()=> {
+    const islogIn = localStorage.getItem("token");
     useEffect( 
+        islogIn && (
             ()=>{fetch("https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyBa1t8g-1UL2YeO6OIh4jJAydUnoaNH_fs",{
                 method : "POST",
                 headers : {
@@ -32,8 +34,8 @@ const Profile = ()=> {
                     ProfileURLinputref.current.value = data.users[0].photoUrl;
                     }
                 }
-            )}
-        ,[])
+            )})
+        ,[]);
     const Fullnameinputref = useRef();
     const ProfileURLinputref = useRef();
     const history = useNavigate();
@@ -77,7 +79,7 @@ const Profile = ()=> {
 
 
     }
-    return (<React.Fragment>
+    return (islogIn && (<React.Fragment>
     <form onSubmit={submitHandler} className={classes.inputform}>
         <label htmlFor = "fullname" >Full Name</label>
         <input
@@ -93,7 +95,7 @@ const Profile = ()=> {
         / >
         <button type="submit">Update</button>
     </form>  
-    </React.Fragment>
+    </React.Fragment>)
     )
 
 }

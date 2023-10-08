@@ -2,11 +2,20 @@ import React , {useState} from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import classes from './Home.module.css';
+import ExpenseForm from "../components/ExpenseForm";
+import ExpenseList from "../components/ExpenseList";
 
 const Homepage = () => {
     const login = localStorage.getItem("token");
     const history =  useNavigate();
     const [isLoggedIn,setIsLoggedIn] = useState(login);
+    const [expenses, setExpenses] = useState([]);
+
+    const addExpense = (newExpense) => {
+        setExpenses([...expenses, newExpense]);
+      };
+
+
     const logOutHandler = () =>{
         localStorage.removeItem("token");
         history("/",{replace : true});
@@ -60,6 +69,8 @@ const Homepage = () => {
         <button className={classes.innerbut} onClick={logOutHandler}>Logout</button>
     </section>
     <div className={classes.but}><button onClick={verifyEmailHandler} className={classes.innerbut} >Verify Email</button></div>
+    <ExpenseForm addExpense={addExpense}/>
+      <ExpenseList expenses={expenses} />
     </div>
     )
     
