@@ -24,10 +24,10 @@ const ExpenseForm = (props) => {
         category: formData.category,
       };
     
-      // Call the addExpense function to add the new expense to the list
+      // Calling the addExpense function to add the new expense to the list
       props.addExpense(newExpense);
     
-      // Reset the form fields by setting formData to initial values
+
       setFormData({
         moneySpent: "",
         description: "",
@@ -74,6 +74,7 @@ const ExpenseForm = (props) => {
             <option value="Salary">Salary</option>
             <option value="Movie">Movie</option>
             <option value="Loan and Credit Card bills">Loan and Credit Card Bills</option>
+            <option value="Entertainment">Entertainment</option>
           </select>
         </div>
         <button type="submit">Submit</button>
