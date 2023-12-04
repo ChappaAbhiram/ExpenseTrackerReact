@@ -33,8 +33,8 @@ const Homepage = () => {
             }
         }).then(data=>{
             console.log(data);
+            fetchExpenses();
         });
-        fetchExpenses();
       };
 
 const fetchExpenses = ()=>{
@@ -114,8 +114,8 @@ fetchExpenses();
         <button className={classes.innerbut} onClick={logOutHandler}>Logout</button>
     </section>
     <div className={classes.but}><button onClick={verifyEmailHandler} className={classes.innerbut} >Verify Email</button></div>
-    <ExpenseForm addExpense={addExpense}/>
-      <ExpenseList expenses={expenses} />
+    <ExpenseForm addExpense={addExpense} fetchExpenses={fetchExpenses}/>
+      <ExpenseList expenses = {expenses} fetchExpenses={fetchExpenses} />
     </div>
     )
     

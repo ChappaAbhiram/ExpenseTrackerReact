@@ -1,11 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useContext,useEffect } from "react";
+import ExpenseCtx from "../context/ExpenseContext";
 
 const ExpenseForm = (props) => {
+  
   const [formData, setFormData] = useState({
     moneySpent: "",
     description: "",
     category: "Food",
   });
+  const ctx = useContext(ExpenseCtx);
+  useEffect(()=>{
+    if(ctx.editexpenseData){
+      setFormData(ctx.editexpenseData);
+    }
+  },[ctx.editexpenseData]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -19,20 +27,40 @@ const ExpenseForm = (props) => {
     e.preventDefault();
     console.log("Form data submitted:", formData);
     const newExpense = {
-        moneySpent: formData.moneySpent,
-        description: formData.description,
-        category: formData.category,
-      };
-    
-      // Calling the addExpense function to add the new expense to the list
-      props.addExpense(newExpense);
-    
-
+      moneySpent: formData.moneySpent,
+      description: formData.description,
+      category: formData.category,
+    };
+    if(ctx.editexpenseData){
+     fetch(`https://expensetrackernew-ec752-default-rtdb.firebaseio.com/expenses/${ctx.id}.json`,{
+        method : "PUT",
+        headers : {
+        "Content-type" : "application/json"
+        },
+        body : JSON.stringify(newExpense)
+     } ).then(res=>{
+      return res.json();
+     }).then(data=>{
+      ctx.cleareditExpense();
+      props.fetchExpenses();
       setFormData({
         moneySpent: "",
         description: "",
         category: "Food",
       });
+      
+     })
+    }
+    
+      // Calling the addExpense function to add the new expense to the list
+      else{
+      props.addExpense(newExpense);
+      setFormData({
+        moneySpent: "",
+        description: "",
+        category: "Food",
+      });
+      }
   };
 
   return (
@@ -77,7 +105,7 @@ const ExpenseForm = (props) => {
             <option value="Entertainment">Entertainment</option>
           </select>
         </div>
-        <button type="submit">Submit</button>
+        <button type="submit">{ctx.editexpenseData?"Update" : "Submit"}</button>
       </form>
     </div>
   );
