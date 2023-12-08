@@ -9,6 +9,8 @@ import { useDispatch } from "react-redux";
 import { authActions } from "../store/auth";
 import { expenseActions } from "../store/expense";
 import { fetchExpenses } from "../store/expense";
+import ToggleButton from "../components/ToggleButton";
+import DownloadButton from "../components/DownloadButton";
 
 
 const Homepage = () => {
@@ -72,6 +74,7 @@ useEffect(()=>{
         <div style={{color : 'white'}}>Profile incomplete<Link to="/profile"> Complete your Profile</Link></div>
         <button className={classes.innerbut} onClick={logOutHandler}>Logout</button>
     </section>
+    <div><DownloadButton />  <ToggleButton /></div>
     <div className={classes.but}><button onClick={verifyEmailHandler} className={classes.innerbut} >Verify Email</button></div>
     <ExpenseForm />
       <ExpenseList />
