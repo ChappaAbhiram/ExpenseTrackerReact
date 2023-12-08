@@ -1,26 +1,24 @@
-// Inside ExpenseList.js
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchEditExpenseData, fetchExpenses } from "../store/expense";
 
-import React,{useContext} from "react";
-import ExpenseCtx from "../context/ExpenseContext";
-
-// Inside ExpenseList.js
-
-// ... (other imports)
-
-const ExpenseList = (props) => {
-  const expensearray = [];
-  const ctx = useContext(ExpenseCtx);
-
-  for (const id in props.expenses) {
-    if (props.expenses.hasOwnProperty(id)) {
-      const expense = props.expenses[id];
-      expensearray.push({ id, ...expense });
+// Function to calculate total sum
+const calculateTotalSum = (expenses) => {
+  let totalSum = 0;
+  for (const id in expenses) {
+    if (expenses.hasOwnProperty(id)) {
+      const expense = expenses[id];
+      totalSum += Number(expense.moneySpent) || 0;
     }
   }
-  // props.fetchExpenses();
+  return totalSum;
+};
+
+const ExpenseList = (props) => {
+  const expenses = useSelector((state) => state.expense.expensesData);
+  const dispatch = useDispatch();
 
   const deleteExpense = (id) => {
-    console.log(id)
     fetch(`https://expensetrackernew-ec752-default-rtdb.firebaseio.com/expenses/${id}.json`, {
       method: "DELETE",
     })
@@ -38,27 +36,44 @@ const ExpenseList = (props) => {
       })
       .then((data) => {
         console.log(data);
-        // Fetch the updated expenses after deleting
-        props.fetchExpenses();
+        dispatch(fetchExpenses());
       });
   };
+
+  const editExpense = (id) => {
+    console.log(id);
+    dispatch(fetchEditExpenseData(id));
+    // Optionally, you can navigate to the edit form or another component
+    // based on your application's structure.
+    // props.history.push("/edit-form"); // Example navigation
+  };
+
+  // Calculate the total sum of expenses using the function
+  const totalSum = calculateTotalSum(expenses || {});
 
   return (
     <div>
       <h2>Expenses</h2>
       <ul>
-        {expensearray.map((expense) => (
-          <li key={expense.id}>
+        {expenses && Object.entries(expenses).map(([id, expense]) => (
+          <li key={id}>
             <strong>Money Spent:</strong> {expense.moneySpent}
             <br />
             <strong>Description:</strong> {expense.description}
             <br />
             <strong>Category:</strong> {expense.category}
-            <button onClick={() => deleteExpense(expense.id)}>Delete</button>
-            <button onClick={() => ctx.seteditExpense(expense.id)}>Edit</button>
+            <button onClick={() => deleteExpense(id)}>Delete</button>
+            <button onClick={() => editExpense(id)}>Edit</button>
           </li>
         ))}
       </ul>
+
+      {/* Display total sum after all the expense items */}
+      <div>
+        {totalSum<=10000 && <p>Total Expenses: ${totalSum.toFixed(2)}</p>}
+       { /* Conditionally render the "Activate Premium" button */}
+        {totalSum > 10000 && <button>Total Expenses Crossed 10k Activate Premium</button>}
+      </div>
     </div>
   );
 };

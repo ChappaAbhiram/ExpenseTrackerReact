@@ -1,30 +1,31 @@
-import { useState, useRef  } from 'react';
- import {NavLink} from 'react-router-dom';
-// import AuthContext from '../../store/AuthContext';
-import classes from './AuthForm.module.css';
+import { useState, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import classes from './AuthForm.module.css';
+import { authActions } from '../store/auth';
 const AuthForm = () => {
+  const dispatch = useDispatch();
   const history = useNavigate();
-  const emailInputref = useRef();
-  const passwordInputref = useRef(); 
-  const confirmPasswordref = useRef();
+  const emailInputRef = useRef();
+  const passwordInputRef = useRef();
+  const confirmPasswordRef = useRef();
 
-//   const authctx = useContext(AuthContext);
-  const [isLogin, setIsLogin] = useState(false);
+  const isLogin = useSelector((state) => state.auth.isLoggedin);
+  const userId = useSelector(state=>state.auth.userId);
   const [isLoading,setIsLoading] = useState(false);
   const [forgotPassword,setforgotPassword] = useState(false);
 
   const switchAuthModeHandler = () => {
-    setIsLogin((prevState) => !prevState);
+    dispatch(authActions.switchmode());
     setforgotPassword(false);
   };
   const submitHandler = (event)=>{
   event.preventDefault();
-  const enteredEmail = emailInputref.current.value;
-  const enteredPassword = passwordInputref.current.value;
+  const enteredEmail = emailInputRef.current.value;
+  const enteredPassword = passwordInputRef.current.value;
   let confirmPassword;
   if(!isLogin){
-  confirmPassword = confirmPasswordref.current.value;
+  confirmPassword = confirmPasswordRef.current.value;
   }
   setIsLoading(true);
   let url;
@@ -70,7 +71,7 @@ const AuthForm = () => {
     if (isLogin) {
       console.log(data);
     //   authctx.login(data.idToken,data.email);
-      localStorage.setItem('token',data.idToken);
+     dispatch(authActions.login({ token: data.idToken, userId: enteredEmail }))
       history('/home',{replace : true});
     //   localStorage.setItem('email',data.email);
     } else {
@@ -86,10 +87,9 @@ const AuthForm = () => {
  const forgotpasswordHandler = (e)=>{
   e.preventDefault();
   setforgotPassword(true);
-  setIsLogin((prevState) => !prevState);
+  dispatch(authActions.switchmode())
  }
  const sendLinkHandler = (e)=>{
-  const enteredEmail = emailInputref.current.value;
   e.preventDefault();
   setIsLoading(true);
   fetch("https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyBa1t8g-1UL2YeO6OIh4jJAydUnoaNH_fs",{
@@ -98,7 +98,7 @@ const AuthForm = () => {
       "Content-Type" : "application/json"
     },
     body : JSON.stringify({
-      email : enteredEmail,
+      email : userId,
       requestType : "PASSWORD_RESET"
     })
   }).then(res=>{
@@ -124,7 +124,7 @@ const AuthForm = () => {
         <div className={classes.control}>
           {!forgotPassword && <label htmlFor='email'>Your Email</label>}
           {forgotPassword && <label htmlFor='email'>Enter Your Registered email</label>}
-          <input type='email' id='email' required ref={emailInputref}/>
+          <input type='email' id='email' required ref={emailInputRef}/>
         </div>
         {!forgotPassword && (<div className={classes.control}>
           <label htmlFor='password'>Your Password</label>
@@ -132,7 +132,7 @@ const AuthForm = () => {
             type='password'
             id='password'
             required
-            ref={passwordInputref}
+            ref={passwordInputRef}
           />
         </div>)}
         {!isLogin && !forgotPassword && (<div className={classes.control}>
@@ -141,7 +141,7 @@ const AuthForm = () => {
             type='password'
             id='confirmpassword'
             required
-            ref={confirmPasswordref}
+            ref={confirmPasswordRef}
           />
         </div>)
 }

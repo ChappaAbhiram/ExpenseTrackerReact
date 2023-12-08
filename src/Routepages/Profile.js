@@ -2,8 +2,10 @@ import { useRef , useEffect} from "react";
 import React from "react";
 import classes from './Profile.module.css';
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 const Profile = ()=> {
-    const islogIn = localStorage.getItem("token");
+    const islogIn = useSelector(state=>state.auth.isLoggedin);
+    const token = useSelector(state=>state.auth.token);
     useEffect( 
         islogIn && (
             ()=>{fetch("https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyBa1t8g-1UL2YeO6OIh4jJAydUnoaNH_fs",{
@@ -12,7 +14,7 @@ const Profile = ()=> {
                     "Content-Type" : "application/json"
                 },
                 body : JSON.stringify({
-                    idToken : localStorage.getItem("token")
+                    idToken : token
                 })}).then(resp=>{
                     if(resp.ok){
                         return resp.json();
@@ -48,7 +50,7 @@ const Profile = ()=> {
             'Content-Type' : 'application/json'
             },
             body : JSON.stringify({
-                idToken: `${localStorage.getItem("token")}`,
+                idToken: token,
                 displayName: Fullnameinputref.current.value,
                 photoUrl: ProfileURLinputref.current.value,
                  returnSecureToken: 'true'
