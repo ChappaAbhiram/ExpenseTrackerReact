@@ -29,9 +29,11 @@ export const expenseActions = expenseSlice.actions;
 export default expenseSlice.reducer;
 
 // Async action creator to fetch expenses data
-export const fetchExpenses = () => async (dispatch) => {
+export const fetchExpenses = () => async (dispatch,getState) => {
+  const email = getState().auth.userId;
+  const modifiedmail = email.replace(/[.@]/g, '');
   try {
-    const response = await fetch("https://expensetrackernew-ec752-default-rtdb.firebaseio.com/expenses.json", {
+    const response = await fetch(`https://expense-tracker-43d55-default-rtdb.firebaseio.com/expenses/${modifiedmail}.json`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -53,10 +55,12 @@ export const fetchExpenses = () => async (dispatch) => {
 };
 
 // Async action creator to fetch edit expense data
-export const fetchEditExpenseData = (id) => async (dispatch) => {
+export const fetchEditExpenseData = (id) => async (dispatch,getState) => {
     console.log(id);
+    const email = getState().auth.userId;
+    const modifiedmail = email.replace(/[.@]/g, '');
   try {
-    const response = await fetch(`https://expensetrackernew-ec752-default-rtdb.firebaseio.com/expenses/${id}.json`, {
+    const response = await fetch(`https://expense-tracker-43d55-default-rtdb.firebaseio.com/expenses/${modifiedmail}/${id}.json`, {
       method: "GET",
     });
 
@@ -74,129 +78,3 @@ export const fetchEditExpenseData = (id) => async (dispatch) => {
     console.error(error);
   }
 };
-
-
-    // const initialState = {
-    //   expensesData: "",
-    //   editexpenseData: "",
-    //   id: " ",
-    //   status: 'idle',
-    //   error: null,
-    // };
-    
-    // const expenseSlice = createSlice({
-    //   name: 'expense',
-    //   initialState,
-    //   reducers: {
-    //     fetchExpensesSuccess(state, action) {
-    //       state.status = 'succeeded';
-    //       state.expensesData = action.payload;
-    //     },
-    //     fetchExpensesFailed(state, action) {
-    //       state.status = 'failed';
-    //       state.error = action.payload;
-    //     },
-    //     setEditExpenseDataSuccess(state, action) {
-    //       state.status = 'succeeded';
-    //       state.editexpenseData = action.payload;
-    //       state.id = action.payload.id;
-    //     },
-    //     setEditExpenseDataFailed(state, action) {
-    //       state.status = 'failed';
-    //       state.error = action.payload;
-    //     },
-    //     clearEditExpenseData(state) {
-    //       state.editexpenseData = "";
-    //     },
-    //     deleteExpenseSuccess(state, action) {
-    //         console.log(action.payload);
-    //       state.status = 'succeeded';
-    //     },
-    //     deleteExpenseFailed(state, action) {
-    //       state.status = 'failed';
-    //       state.error = action.payload;
-    //     },
-    //   },
-    // });
-    
-    // export const {
-    //   fetchExpensesSuccess,
-    //   fetchExpensesFailed,
-    //   setEditExpenseDataSuccess,
-    //   setEditExpenseDataFailed,
-    //   clearEditExpenseData,
-    //   deleteExpenseSuccess,
-    //   deleteExpenseFailed,
-    // } = expenseSlice.actions;
-    
-    //  const fetchExpenses = () => async (dispatch) => {
-    //   try {
-    //     const response = await fetch("https://expensetrackernew-ec752-default-rtdb.firebaseio.com/expenses.json", {
-    //       method: "GET",
-    //       headers: {
-    //         "Content-Type": "application/json"
-    //       }
-    //     });
-    
-    //     if (!response.ok) {
-    //       throw new Error("Failed to fetch expenses");
-    //     }
-    
-    //     const data = await response.json();
-    //     dispatch(fetchExpensesSuccess(data));
-    //   } catch (error) {
-    //     dispatch(fetchExpensesFailed(error.message));
-    //   }
-    // };
-    
-    //  const setEditExpenseData = (id) => async (dispatch) => {
-    //   try {
-    //     const response = await fetch(`https://expensetrackernew-ec752-default-rtdb.firebaseio.com/expenses/${id}.json`, {
-    //       method: "GET"
-    //     });
-    
-    //     if (!response.ok) {
-    //       throw new Error("Failed to fetch edit expense data");
-    //     }
-    
-    //     const data = await response.json();
-    //     dispatch(setEditExpenseDataSuccess(data));
-    //   } catch (error) {
-    //     dispatch(setEditExpenseDataFailed(error.message));
-    //   }
-    // };
-    
-    //  const deleteExpense = (id) => async (dispatch) => {
-    //   try {
-    //     const response = await fetch(`https://expensetrackernew-ec752-default-rtdb.firebaseio.com/expenses/${id}.json`, {
-    //       method: "DELETE"
-    //     });
-    
-    //     if (!response.ok) {
-    //       throw new Error("Failed to delete expense");
-    //     }
-    
-    //     dispatch(deleteExpenseSuccess());
-    //     // Optionally, dispatch additional actions or handle other state updates after successful deletion
-    //   } catch (error) {
-    //     dispatch(deleteExpenseFailed(error.message));
-    //   }
-    // };
-    
-    // export default expenseSlice.reducer;
-    // export const expenseActions = {
-    //     // Synchronous actions
-    //     fetchExpensesSuccess,
-    //     fetchExpensesFailed,
-    //     setEditExpenseDataSuccess,
-    //     setEditExpenseDataFailed,
-    //     clearEditExpenseData,
-    //     deleteExpenseSuccess,
-    //     deleteExpenseFailed,
-        
-    //     // Asynchronous actions
-    //     fetchExpenses,
-    //     setEditExpenseData,
-    //     deleteExpense,
-    //   };
-    

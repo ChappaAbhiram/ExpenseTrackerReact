@@ -1,44 +1,76 @@
 .home {
-    display: flex;
-    justify-content: space-between;
-    background-color: black;
-    padding: 10px; /* Add padding for spacing */
-  }
+  font: inherit;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  background-color: #40005d;
+  padding: 10px;
+  z-index: 999;
+  margin-bottom: 700px; 
+}
+
   
   .home span {
-    color: white; /* Set text color to white */
+    color: white;
   }
   
   .home a {
-    color: #007bff; /* Set link color to blue (adjust as needed) */
-    text-decoration: none; /* Remove underline from the link */
+    color: #007bff; 
+    text-decoration: none; 
    
   }
-  .but{
-    display : flex;
-    justify-content: center;
-    align-items: center;
-    margin-top : 20px;
-  }
-  .innerbut{
-    background-color: black;
-    padding: 4px;
-    border-radius: 3px;
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 18px;
+  .home>.innerbut{
+    font: inherit;
     cursor: pointer;
-    color : white;
-    transition: background-color 0.3s; 
+    padding: 0.3rem 0.3rem;
+    border: 1px solid white;
+    background-color: #a892ee;
+    color: #40005d;
+    border-radius: 5px;
+    margin-right: 1rem;
   }
-  .innerbut:hover{
-    background-color: white;
-    color : black
-  }
-  .logout{
-    display : flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items : center
+  .home>.innerbut:hover{
+    background-color: lightblue;
+    border: 1px solid white;
+    color : #40005d;
   }
 
-  
+  .newexpense {
+    background-color: #a892ee;
+    padding: 1rem;
+    margin: 3.42rem auto;
+    width: 50rem;
+    max-width: 95%;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
+  }
+  .newexpense button {
+      font: inherit;
+      cursor: pointer;
+      padding: 1rem 2rem;
+      border: 1px solid #40005d;
+      background-color: #40005d;
+      color: white;
+      border-radius: 12px;
+      margin-right: 1rem;
+    }
+    
+    .newexpense button:hover,
+    .newexpense button:active {
+      background-color: #510674;
+      border-color: #510674;
+    }
+    
+    .newexpense button.alternative {
+      color: #220131;
+      border-color: transparent;
+      background-color: transparent;
+    }
+    
+    .newexpense button.alternative:hover,
+    .newexpense button.alternative:active {
+      background-color: #ddb3f8;
+    }

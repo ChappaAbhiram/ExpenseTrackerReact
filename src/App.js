@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 function App() {
   const isdarkTheme = useSelector(state=>state.theme.isDarkTheme);
   return (
-    <div style={{ background: isdarkTheme ? "#333" : "#fff", color: isdarkTheme ? "#fff" : "#333" }}> 
+    <div style={{ background: isdarkTheme ? "black" : "#fff", color: isdarkTheme ? "#333" : "#333" }}> 
     <BrowserRouter>
 
         <Routes>

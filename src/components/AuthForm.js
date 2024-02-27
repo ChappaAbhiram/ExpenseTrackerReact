@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import classes from './AuthForm.module.css';
 import { authActions } from '../store/auth';
+// import expenseimage from '../assets/expenseimage';
+import { Fragment } from 'react';
 const AuthForm = () => {
   const dispatch = useDispatch();
   const history = useNavigate();
@@ -71,6 +73,9 @@ const AuthForm = () => {
     if (isLogin) {
       console.log(data);
     //   authctx.login(data.idToken,data.email);
+    localStorage.setItem("token",data.idToken);
+    // console.log(enteredEmail);
+    localStorage.setItem("email",enteredEmail);
      dispatch(authActions.login({ token: data.idToken, userId: enteredEmail }))
       history('/home',{replace : true});
     //   localStorage.setItem('email',data.email);
@@ -118,48 +123,57 @@ const AuthForm = () => {
   })
  }
   return (
-    <section className={classes.auth}>
-      <h1>{isLogin ? 'Login' : !forgotPassword ? 'Sign Up' : ''}</h1>
-      <form onSubmit={submitHandler}>
-        <div className={classes.control}>
-          {!forgotPassword && <label htmlFor='email'>Your Email</label>}
-          {forgotPassword && <label htmlFor='email'>Enter Your Registered email</label>}
-          <input type='email' id='email' required ref={emailInputRef}/>
-        </div>
-        {!forgotPassword && (<div className={classes.control}>
-          <label htmlFor='password'>Your Password</label>
-          <input
-            type='password'
-            id='password'
-            required
-            ref={passwordInputRef}
-          />
-        </div>)}
-        {!isLogin && !forgotPassword && (<div className={classes.control}>
-          <label htmlFor='confirmpassword'>Confirm Password</label>
-          <input
-            type='password'
-            id='confirmpassword'
-            required
-            ref={confirmPasswordRef}
-          />
-        </div>)
-}
-        <div className={classes.actions}>
-          {!isLoading && !forgotPassword && <button>{isLogin ? 'Login' : 'Create Account'}</button>}
-          {!isLoading && !forgotPassword && isLogin && <button className={classes.toggle} onClick={forgotpasswordHandler}>'Forgot password'</button>}
-          {!isLoading && forgotPassword && <button onClick = {sendLinkHandler}>Send Link</button>}
-          {isLoading && <p>Sending Request.....</p>}
-          <button
-            type='button'
-            className={classes.toggle}
-            onClick={switchAuthModeHandler}
-          >
-            {isLogin && !forgotPassword ? 'Create new account' : 'Login with existing account'}
-          </button>
-        </div>
-      </form>
-    </section>
+    <Fragment>
+    <div className={classes.outerBox}>
+      <h1 className={classes.welcome}>Welcome to Expense Tracker</h1>
+      <div className={classes.innerBox}>
+        <h1 className={classes.heading}>{isLogin ? 'Login' : !forgotPassword ? 'Sign Up' : ''}</h1>
+        <form onSubmit={submitHandler}>
+          <div className={classes.control}>
+            {!forgotPassword && <label htmlFor='email'>Your Email</label>}
+            {forgotPassword && <label htmlFor='email'>Enter Your Registered email</label>}
+            <input type='email' id='email' required ref={emailInputRef}/>
+          </div>
+          {!forgotPassword && (<div className={classes.control}>
+            <label htmlFor='password'>Your Password</label>
+            <input
+              type='password'
+              id='password'
+              required
+              ref={passwordInputRef}
+            />
+          </div>)}
+          {!isLogin && !forgotPassword && (<div className={classes.control}>
+            <label htmlFor='confirmpassword'>Confirm Password</label>
+            <input
+              type='password'
+              id='confirmpassword'
+              required
+              ref={confirmPasswordRef}
+            />
+          </div>)
+          }
+          <div className={classes.actions}>
+            {!isLoading && !forgotPassword && <button className={classes.titlebutton}>{isLogin ? 'Login' : 'Create Account'}</button>}
+            {!isLoading && !forgotPassword && isLogin && (
+  <button className={classes.linkButton} onClick={forgotpasswordHandler}>
+    Forgot password
+  </button>
+)}
+            {!isLoading && forgotPassword && <button onClick = {sendLinkHandler}>Send Link</button>}
+            {isLoading && <p>Sending Request.....</p>}
+            <button
+              type='button'
+              className={classes.toggle}
+              onClick={switchAuthModeHandler}
+            >
+              {isLogin && !forgotPassword ? 'Create new account' : 'Login with existing account'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    </Fragment>
   );
 };
 

@@ -3,14 +3,14 @@ import { useSelector } from 'react-redux';
 const DownloadButton = ()=>{
 const expenses = useSelector(state=>state.expense.expensesData);
 const downloadCsv = () => {
-    let csvContent = "ExpenseID,MoneySpent,Description,Category\n";
+    let csvContent = "ExpenseID,Date,MoneySpent,Description,Category,Location\n";
     for (const id in expenses) {
       if (expenses.hasOwnProperty(id)) {
         const expense = expenses[id];
-        csvContent += `${id},${expense.moneySpent},${expense.description},${expense.category}\n`;
+        console.log(id);
+        csvContent += `${id},${expense.date},${expense.moneySpent},${expense.description},${expense.category},${expense.location}\n`;
       }
     }
-
     const blob = new Blob([csvContent], { type: "text/csv" });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
